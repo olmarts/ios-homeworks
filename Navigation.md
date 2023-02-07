@@ -38,7 +38,8 @@
 1) Удалить строку (4-я сверху) 'Main storyboard file base name': Main.
 2) Удалить строку (внизу в разделе Application Scene Manifest/Scene Configuratiion/Application Session Role/Item 0) 'Storyboard Name': Main.
 3) Проверить файл Info.plist - такая же строка как в п.2 со ссылкой на Main также должна исчезнуть.
-4) Command+B.
+4) Удаляем этот Main.storyboard. 
+5) Command+B.
 
 ### 2. Удаление из проекта ViewController.swift, который создался по умолчанию.
 Удаляем этот файл из навигатора. Если не него не было ссылок, то нет проблем.
@@ -54,7 +55,9 @@ final class TabBarViewController: UITabBarController
 Проблема после удаления файла SceneDelegate.swift:
 Если в симуляторе window?.backgroundColor станет черным (или прозрачным), то
 в Info.plist надо просто удалить ВСЮ ветку 'Scene Configuration', это поможет (при условии если явно задан цвет в window?.backgroundColor).
-После чего код в классе AppDelegate:
+
+Из класса AppDelegate удаляем лишние методы, связанные с Scene, в итого должен остаться единственный метод.
+После чего полный код класса AppDelegate:
 ```
 import UIKit
 
@@ -75,6 +78,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 }
 ```
+Проверим если краши при выполнении в симуляторе: Command+R.
 
 ### 5. Создаем структуру которая представляет минимальную информацию о посте в ленте.
 ```
