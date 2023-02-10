@@ -18,7 +18,7 @@ final class InfoViewController: UIViewController {
     private let backButton: UIButton = {
         let button: UIButton = UIButton(frame: CGRect(x: 50 , y: 50, width: 150, height: 40))
         button.setTitle("Назад", for: .normal)
-        button.backgroundColor = .blue
+        button.backgroundColor = .systemBlue
         return button
     }()
     
