@@ -10,6 +10,7 @@ import UIKit
 final class ProfileHeaderView: UIView {
     
     private var statusText = String()
+    private let defaultStatusText = "Listening to music"
     
     private var userImageView: UIImageView = {
         let imageView = UIImageView(frame: CGRect(x: 0, y: 0, width: 130, height: 130))
@@ -29,26 +30,26 @@ final class ProfileHeaderView: UIView {
         label.textColor = .black
         label.adjustsFontSizeToFitWidth = true
         label.minimumScaleFactor = 0.7
-        label.numberOfLines = 1
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
-    }()
-    
-    private let userStatusLabel: UILabel = {
-        let label = UILabel()
-        label.text = "Listening to music"
-        label.font = UIFont.systemFont(ofSize: 14, weight: .regular)
-        label.textColor = .darkGray
-        label.adjustsFontSizeToFitWidth = true
-        label.minimumScaleFactor = 0.7
         label.numberOfLines = 2
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
-    private let statusTextField: UITextField = {
+    private lazy var userStatusLabel: UILabel = {
+        let label = UILabel()
+        label.text = defaultStatusText
+        label.font = UIFont.systemFont(ofSize: 14, weight: .regular)
+        label.textColor = .darkGray
+        label.adjustsFontSizeToFitWidth = true
+        label.minimumScaleFactor = 0.7
+        label.numberOfLines = 3
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
+    private lazy var statusTextField: UITextField = {
         let textField = UITextField()
-        textField.placeholder = "Listening to music"
+        textField.placeholder = defaultStatusText
         textField.font = UIFont.systemFont(ofSize: 15, weight: .regular)
         textField.textColor = .black
         textField.layer.cornerRadius = 12
@@ -56,6 +57,7 @@ final class ProfileHeaderView: UIView {
         textField.layer.borderColor = UIColor.black.cgColor
         textField.backgroundColor = .white
         textField.translatesAutoresizingMaskIntoConstraints = false
+        textField.setPadding(left: 10, right: 10)
         return textField
     }()
     
@@ -84,7 +86,9 @@ final class ProfileHeaderView: UIView {
     }
     
     @objc private func buttonPressed(){
-        if (!statusText.isEmpty) {
+        if (statusText.isEmpty) {
+            userStatusLabel.text = defaultStatusText
+        } else {
             userStatusLabel.text = statusText
         }
         print("status: '\(statusText)'")
@@ -98,27 +102,46 @@ final class ProfileHeaderView: UIView {
         NSLayoutConstraint.activate([
             
             userImageView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 16),
-            userImageView.leftAnchor.constraint(equalTo: safeAreaLayoutGuide.leftAnchor, constant: 16),
+            userImageView.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor, constant: 16),
             userImageView.widthAnchor.constraint(equalToConstant: 130),
             userImageView.heightAnchor.constraint(equalToConstant: 130),
             
             userNameLabel.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 27),
-            userNameLabel.leftAnchor.constraint(equalTo: userImageView.rightAnchor, constant: 16),
+            userNameLabel.leadingAnchor.constraint(equalTo: userImageView.trailingAnchor, constant: 16),
             userNameLabel.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: -16),
-            userStatusLabel.topAnchor.constraint(equalTo: userNameLabel.bottomAnchor, constant: 16),
-            userStatusLabel.leftAnchor.constraint(equalTo: userImageView.rightAnchor, constant: 16),
+            
+            userStatusLabel.topAnchor.constraint(greaterThanOrEqualTo: userNameLabel.bottomAnchor, constant: 16),
+            userStatusLabel.leadingAnchor.constraint(equalTo: userImageView.trailingAnchor, constant: 16),
             userStatusLabel.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: -16),
             
             statusTextField.topAnchor.constraint(equalTo: userStatusLabel.bottomAnchor, constant: 8),
-            statusTextField.leftAnchor.constraint(equalTo: userImageView.rightAnchor, constant: 16),
+            statusTextField.leadingAnchor.constraint(equalTo: userImageView.trailingAnchor, constant: 16),
             statusTextField.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: -16),
             statusTextField.heightAnchor.constraint(equalToConstant: 40),
             
-            setStatusButton.topAnchor.constraint(equalTo: userImageView.bottomAnchor, constant: 16),
-            setStatusButton.leftAnchor.constraint(equalTo: safeAreaLayoutGuide.leftAnchor, constant: 16),
+            setStatusButton.topAnchor.constraint(greaterThanOrEqualTo: userImageView.bottomAnchor, constant: 16),
+            setStatusButton.topAnchor.constraint(equalTo: statusTextField.bottomAnchor, constant: 34),
+            setStatusButton.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor, constant: 16),
             setStatusButton.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: -16),
             setStatusButton.heightAnchor.constraint(equalToConstant: 50),
             
         ])
     }
+}
+
+
+extension UITextField {
+    
+    // Устанавливает внутренние отступы текста для красоты.
+    func setPadding(left: CGFloat, right: CGFloat? = nil) {
+        let paddingView = UIView(frame: CGRect(x: 0, y: 0, width: left, height: self.frame.size.height))
+        self.leftView = paddingView
+        self.leftViewMode = .always
+        if let rightPadding = right {
+            let paddingView = UIView(frame: CGRect(x: 0, y: 0, width: rightPadding, height: self.frame.size.height))
+            self.rightView = paddingView
+            self.rightViewMode = .always
+        }
+    }
+    
 }
