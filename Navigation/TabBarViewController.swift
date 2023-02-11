@@ -28,9 +28,9 @@ final class TabBarViewController: UITabBarController {
     
     private func setupControllers() {
         feedVC.tabBarItem.title = "Feed"
-        feedVC.tabBarItem.image = UIImage(systemName: "leaf.fill")
+        feedVC.tabBarItem.image = UIImage(systemName: "house.fill")
         profileVC.tabBarItem.title = "Profile"
-        profileVC.tabBarItem.image = UIImage(systemName: "bolt.fill")
+        profileVC.tabBarItem.image = UIImage(systemName: "person.fill")
         /* 5. Создайте FeedViewController и ProfileViewController и добавьте их как root view controller у навигационных контроллеров.*/
         let navigationFeedVC = UINavigationController(rootViewController: feedVC)
         let navigationProfileVC = UINavigationController(rootViewController: profileVC)
