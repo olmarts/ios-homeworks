@@ -7,7 +7,6 @@
 
 import Foundation
 
-// 7.1. Создайте структуру Post со свойством title: String.
 struct Post {
     var title: String
 }
