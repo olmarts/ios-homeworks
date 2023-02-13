@@ -1,1 +1,27 @@
-# 2.1 Homework:  UIView, CALayer, UIWindow. UI-Components 
+x# Домашнее задание "Верстка экранов для iOS. Auto Layout"
+# 2.2 Верстка экранов для iOS. Автоматический макет
+
+## Основное задание
+### создать класс ProfileHeaderView, добавить подпредставления, задайте положение и размер с помощью Auto Layout:
+- avatarImageView;
+- fullNameLabel;
+- statusLabel;
+- statusTextField;
+- setStatusButton.
+### На экран ProfileViewController добавлены ProfileHeaderView, задайте и размер с помощью Auto Layout:
+- Слева и правые нулевые отступы;
+- Сверху привяжите к Safe Area;
+- Высоту задайте равной 220.
+Удалить код в методе layoutSubviews().
+Добавить новый UIButton, изменить title и задайте правила невозможности отображения с помощью кода:
+- Слева и правые нулевые отступы;
+- Снизу привяжите к Safe Area.
+
+## Дополнительное задание (со звездочкой)
+- На экране FeedViewController создайте UIStackViewс вертикальным расположением элементов. 
+Удалите установку для открытия поста, которая была добавлена ​ранее.
+Расположите его по центру экрана.
+- Добавить две UIButtonв UIStackView.
+- Задайте spacing 10.
+- Добавьте открытие экрана PostViewController на приложение каждой кнопки.
+

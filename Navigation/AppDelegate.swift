@@ -18,17 +18,26 @@ import UIKit
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
     
-    // создаем свойство как в классе SceneDelegate:
     var window: UIWindow?
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        // создаем и настраиваем главное окно приложения:
         window = UIWindow(frame: UIScreen.main.bounds)
-        window?.backgroundColor = .systemGray5
+        window?.backgroundColor = .white
         window?.rootViewController = TabBarViewController()
         window?.makeKeyAndVisible()
-        // возвращаем обязательный результат:
+        setup()
         return true
+    }
+    
+    func setup() {
+        // Верхний навбар - фон, текст тайтла, текст кнопок:
+        UINavigationBar.appearance().backgroundColor  = .systemGray
+        UINavigationBar.appearance().tintColor  = .lightText
+        UINavigationBar.appearance().titleTextAttributes = [NSAttributedString.Key.foregroundColor : UIColor.lightText]
+        // Нижний таббар - фон, текст активного таба:
+        UITabBar.appearance().backgroundColor = .systemGray
+        UITabBar.appearance().tintColor = .lightText
+        UITabBar.appearance().unselectedItemTintColor = .lightGray
     }
 }
 

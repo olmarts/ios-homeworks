@@ -64,16 +64,13 @@
 		7F2F985129927C6A00BB5C1B /* Navigation */ = {
 			isa = PBXGroup;
 			children = (
+				7FC365E3299A061300722B2A /* Feed */,
 				7FAC461629964917004D294F /* Profile */,
 				7F2F985229927C6A00BB5C1B /* AppDelegate.swift */,
 				7F2F985B29927C6B00BB5C1B /* Assets.xcassets */,
 				7F2F985D29927C6B00BB5C1B /* LaunchScreen.storyboard */,
 				7F2F986029927C6B00BB5C1B /* Info.plist */,
 				7F2F98682992864300BB5C1B /* TabBarViewController.swift */,
-				7F2F986A2992884B00BB5C1B /* Post.swift */,
-				7F2F986C299288DA00BB5C1B /* FeedViewController.swift */,
-				7F2F98702992891300BB5C1B /* PostViewController.swift */,
-				7F2F98722992892C00BB5C1B /* InfoViewController.swift */,
 			);
 			path = Navigation;
 			sourceTree = "<group>";
@@ -85,6 +82,17 @@
 				7FAC461B29964B3D004D294F /* ProfileViewController.swift */,
 			);
 			path = Profile;
+			sourceTree = "<group>";
+		};
+		7FC365E3299A061300722B2A /* Feed */ = {
+			isa = PBXGroup;
+			children = (
+				7F2F986C299288DA00BB5C1B /* FeedViewController.swift */,
+				7F2F98702992891300BB5C1B /* PostViewController.swift */,
+				7F2F98722992892C00BB5C1B /* InfoViewController.swift */,
+				7F2F986A2992884B00BB5C1B /* Post.swift */,
+			);
+			path = Feed;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
