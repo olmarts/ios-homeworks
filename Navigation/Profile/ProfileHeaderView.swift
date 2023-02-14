@@ -9,6 +9,9 @@ import UIKit
 
 final class ProfileHeaderView: UIView {
     
+    // Уведомлять о появлении/скрытии клавиатуры:
+    private let notification = NotificationCenter.default
+    
     private var statusText = String()
     private let defaultStatusText = "Listening to music"
     
@@ -57,7 +60,8 @@ final class ProfileHeaderView: UIView {
         textField.layer.borderColor = UIColor.black.cgColor
         textField.backgroundColor = .white
         textField.translatesAutoresizingMaskIntoConstraints = false
-        textField.setPadding(left: 10, right: 10)
+        textField.setPadding(left: 16, right: 16)
+        textField.delegate = self
         return textField
     }()
     
@@ -85,13 +89,14 @@ final class ProfileHeaderView: UIView {
         statusTextField.addTarget(self, action: #selector(statusTextChanged), for: .editingChanged)
     }
     
-    @objc private func buttonPressed(){
+    @objc private func buttonPressed() -> Bool {
         if (statusText.isEmpty) {
             userStatusLabel.text = defaultStatusText
         } else {
             userStatusLabel.text = statusText
         }
-        print("status: '\(statusText)'")
+        statusTextField.text = nil
+        return textFieldShouldReturn(statusTextField)
     }
     
     @objc func statusTextChanged(_ textField: UITextField) {
@@ -120,28 +125,30 @@ final class ProfileHeaderView: UIView {
             statusTextField.heightAnchor.constraint(equalToConstant: 40),
             
             setStatusButton.topAnchor.constraint(greaterThanOrEqualTo: userImageView.bottomAnchor, constant: 16),
-            setStatusButton.topAnchor.constraint(equalTo: statusTextField.bottomAnchor, constant: 34),
+            setStatusButton.topAnchor.constraint(equalTo: statusTextField.bottomAnchor, constant: 16),
             setStatusButton.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor, constant: 16),
             setStatusButton.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: -16),
             setStatusButton.heightAnchor.constraint(equalToConstant: 50),
+            setStatusButton.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -20)
             
         ])
     }
 }
 
-
-extension UITextField {
+extension ProfileHeaderView: UITextFieldDelegate {
     
-    // Устанавливает внутренние отступы текста для красоты.
-    func setPadding(left: CGFloat, right: CGFloat? = nil) {
-        let paddingView = UIView(frame: CGRect(x: 0, y: 0, width: left, height: self.frame.size.height))
-        self.leftView = paddingView
-        self.leftViewMode = .always
-        if let rightPadding = right {
-            let paddingView = UIView(frame: CGRect(x: 0, y: 0, width: rightPadding, height: self.frame.size.height))
-            self.rightView = paddingView
-            self.rightViewMode = .always
-        }
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        endEditing(true)
+        return true
     }
     
+    func textFieldDidBeginEditing(_ textField: UITextField)  {
+        textField.layer.borderColor = UIColor.blue.cgColor
+    }
+    
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        textField.layer.borderColor = UIColor.black.cgColor
+    }
 }
+
+
