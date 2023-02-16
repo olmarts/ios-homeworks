@@ -24,6 +24,7 @@ final class FeedViewController: UIViewController {
         let button = UIButton(frame: CGRect(x: 50 , y: 50, width: 150, height: 40))
         button.setTitle("Show post", for: .normal)
         button.backgroundColor = .systemBlue
+        button.layer.cornerRadius = 10
         return button
     }()
     
@@ -31,6 +32,7 @@ final class FeedViewController: UIViewController {
         let button = UIButton(frame: CGRect(x: 50 , y: 50, width: 150, height: 40))
         button.setTitle("Edit post", for: .normal)
         button.backgroundColor = .systemBlue
+        button.layer.cornerRadius = 10
         return button
     }()
     

@@ -13,6 +13,7 @@ final class InfoViewController: UIViewController {
         let button: UIButton = UIButton(frame: CGRect(x: 50 , y: 50, width: 150, height: 40))
         button.setTitle("Назад", for: .normal)
         button.backgroundColor = .systemBlue
+        button.layer.cornerRadius = 10
         return button
     }()
     

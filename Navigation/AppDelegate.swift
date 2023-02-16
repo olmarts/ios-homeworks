@@ -22,7 +22,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         window = UIWindow(frame: UIScreen.main.bounds)
-        window?.backgroundColor = .white
+        window?.backgroundColor = .systemGray4
         window?.rootViewController = TabBarViewController()
         window?.makeKeyAndVisible()
         setup()
@@ -31,13 +31,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func setup() {
         // Верхний навбар - фон, текст тайтла, текст кнопок:
-        UINavigationBar.appearance().backgroundColor  = .systemGray
+        UINavigationBar.appearance().backgroundColor  = .darkGray.withAlphaComponent(0.9)
         UINavigationBar.appearance().tintColor  = .lightText
         UINavigationBar.appearance().titleTextAttributes = [NSAttributedString.Key.foregroundColor : UIColor.lightText]
         // Нижний таббар - фон, текст активного таба:
-        UITabBar.appearance().backgroundColor = .systemGray
+        UITabBar.appearance().backgroundColor = .darkGray.withAlphaComponent(0.9)
         UITabBar.appearance().tintColor = .lightText
-        UITabBar.appearance().unselectedItemTintColor = .lightGray
+        UITabBar.appearance().unselectedItemTintColor = UIColor(hex: "#cccccc", alpha: 0.5)
     }
 }
 

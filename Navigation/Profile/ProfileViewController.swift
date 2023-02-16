@@ -9,31 +9,46 @@ import UIKit
 
 class ProfileViewController: UIViewController {
     
+    // Внешняя функция, котора] будет выполнена после Logout:
+    var afterLogoutAction: Optional<() -> ()> = nil
+    
     let profileHeaderView = ProfileHeaderView()
     
-    private var someButton: UIButton = {
+    private var logoutButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle("Hidden button", for: .normal)
-        button.setTitleColor(.systemBlue, for: .normal)
-        button.backgroundColor = .systemGray2
+        button.setTitle("Logout", for: .normal)
+        button.setTitleColor(.lightText, for: .normal)
+        button.backgroundColor = .systemBlue
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.isHidden = true
+        button.isHidden = false
         return button
     }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        setup()
+    }
+    
+    private func setup() {
         title = "Profile"
         profileHeaderView.backgroundColor = .lightGray
-        profileHeaderView.setupView()
         view.addSubview(profileHeaderView)
-        view.addSubview(someButton)
+        view.addSubview(logoutButton)
+        logoutButton.addTarget(self, action: #selector(buttonPressed), for: .touchUpInside)
         setConstraints()
     }
     
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
         profileHeaderView.frame = view.bounds
+    }
+    
+    
+    @objc private func buttonPressed() {
+        if let externalFunc = self.afterLogoutAction {
+            externalFunc()
+            print("Log out!")
+        }
     }
     
     private func setConstraints() {
@@ -46,12 +61,15 @@ class ProfileViewController: UIViewController {
             profileHeaderView.rightAnchor.constraint(equalTo: view.rightAnchor),
             profileHeaderView.heightAnchor.constraint(greaterThanOrEqualToConstant: 220),
             
-            someButton.leftAnchor.constraint(equalTo: view.leftAnchor),
-            someButton.rightAnchor.constraint(equalTo: view.rightAnchor),
-            someButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            logoutButton.leftAnchor.constraint(equalTo: view.leftAnchor),
+            logoutButton.rightAnchor.constraint(equalTo: view.rightAnchor),
+            logoutButton.heightAnchor.constraint(equalToConstant: 50),
+            logoutButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
             
         ])
     }
     
     
 }
+
+
