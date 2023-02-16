@@ -7,6 +7,12 @@
 
 import UIKit
 
+extension UIView {
+    
+    func constraintsOnly() {
+        self.translatesAutoresizingMaskIntoConstraints = false
+    }
+}
 
 extension UITextField {
     

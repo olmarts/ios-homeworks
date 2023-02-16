@@ -26,9 +26,12 @@ class ProfileViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        setup()
+    }
+    
+    private func setup() {
         title = "Profile"
         profileHeaderView.backgroundColor = .lightGray
-        profileHeaderView.setupView()
         view.addSubview(profileHeaderView)
         view.addSubview(logoutButton)
         logoutButton.addTarget(self, action: #selector(buttonPressed), for: .touchUpInside)
@@ -68,3 +71,5 @@ class ProfileViewController: UIViewController {
     
     
 }
+
+

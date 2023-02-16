@@ -1,13 +1,19 @@
-//
-//  LogInViewController.swift
-//  Navigation
-//
-//  Created by user1 on 14.02.2023.
-//
+/**
+Замечание:
+А вот текстфилды с логином и паролем нужно поместить в UIStackView. Границы и скругление уже сделаете непосредственно у стеквью.
+
+Решение:
+Я сделал границы и скругление непосредственно у стеквью, но таким образом стеквью
+получился с высотой в 2 текстФилда+0.5 = 80.5 пойнтов,
+После чего при повороте на 90 ерадусов, экран перестал скроллироваться ,
+так как логотип (который переместился над стеквью) так занимает все место на экране.
+Поэтому границы и закругления сделал в отдельной вью куда поместил текстфилды и разделитель.
+Все остальные замечания исправлены.
+ */
 
 import UIKit
 
-class LogInViewController: UIViewController {
+final class LogInViewController: UIViewController {
     
     // Внешняя функция, котора] будет выполнена после входа:
     var afterLogonAction: Optional<() -> ()> = nil
@@ -15,10 +21,10 @@ class LogInViewController: UIViewController {
     // Уведомлять о появлении/скрытии клавиатуры:
     private let notification = NotificationCenter.default
     
-    let scrollView: UIScrollView = {
-        let scrollView = UIScrollView()
-        scrollView.translatesAutoresizingMaskIntoConstraints = false
-        return scrollView
+    private let scrollView: UIScrollView = {
+        let view = UIScrollView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
     }()
     
     private let contentView: UIView = {
@@ -29,9 +35,25 @@ class LogInViewController: UIViewController {
     
     private var logoImageView: UIImageView = {
         let imageView = UIImageView()
-        imageView.image = UIImage(imageLiteralResourceName: "logo")
+        imageView.image = UIImage(named: "logo")
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
+    }()
+    
+    private let roundCornersView: UIView = {
+        let view = UIView()
+        view.layer.borderColor = UIColor.lightGray.cgColor
+        view.layer.borderWidth = 0.5
+        view.layer.cornerRadius = 10
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    
+    private let separatorView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .lightGray
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
     }()
     
     private lazy var userNameTextField: UITextField = {
@@ -39,8 +61,6 @@ class LogInViewController: UIViewController {
         textField.placeholder = "Email or phone"
         textField.placeholderColor(textField.textColor, alpha: 0.6)
         textField.layer.borderColor = UIColor.lightGray.cgColor
-        textField.layer.borderWidth = 0.5
-        textField.layer.cornerRadius = 10
         textField.textColor = .black
         textField.font = UIFont.systemFont(ofSize: 16, weight: .regular)
         textField.tintColor = UIColor(hex: "#4885CC")
@@ -57,8 +77,6 @@ class LogInViewController: UIViewController {
         textField.placeholder = "Password"
         textField.placeholderColor(textField.textColor, alpha: 0.6)
         textField.layer.borderColor = UIColor.lightGray.cgColor
-        textField.layer.borderWidth = 0.5
-        textField.layer.cornerRadius = 10
         textField.textColor = .black
         textField.font = UIFont.systemFont(ofSize: 16, weight: .regular)
         textField.tintColor = UIColor(hex: "#4885CC")
@@ -81,19 +99,25 @@ class LogInViewController: UIViewController {
         // скруглить углы у кнопки, покрашенной картинкой, получилось только вот так:
         button.layer.maskedCorners = [.layerMaxXMaxYCorner, .layerMaxXMinYCorner, .layerMinXMaxYCorner, .layerMinXMinYCorner]
         button.layer.masksToBounds = true
+        
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
     
-    
     override func viewDidLoad() {
         super.viewDidLoad()
+        setup()
+    }
+    
+    private func setup() {
         view.backgroundColor = .white
         view.addSubview(scrollView)
         scrollView.addSubview(contentView)
         contentView.addSubview(logoImageView)
-        contentView.addSubview(userNameTextField)
-        contentView.addSubview(userPasswordTextField)
+        contentView.addSubview(roundCornersView)
+        roundCornersView.addSubview(userNameTextField)
+        roundCornersView.addSubview(separatorView)
+        roundCornersView.addSubview(userPasswordTextField)
         contentView.addSubview(loginButton)
         setConstraints()
         loginButton.addTarget(self, action: #selector(buttonPressed), for: .touchUpInside)
@@ -109,6 +133,7 @@ class LogInViewController: UIViewController {
         super.viewWillDisappear(animated)
         notification.removeObserver(UIResponder.keyboardWillShowNotification)
         notification.removeObserver(UIResponder.keyboardWillHideNotification)
+        view.endEditing(true)
     }
     
     @objc private func keyboardWillShow(notification: NSNotification) {
@@ -117,7 +142,6 @@ class LogInViewController: UIViewController {
             scrollView.verticalScrollIndicatorInsets = UIEdgeInsets(top: 0, left: 0, bottom: keybordSize.height, right: 0)
         }
     }
-    
     
     @objc private func keyboardWillHide() {
         scrollView.contentInset = .zero
@@ -136,6 +160,7 @@ class LogInViewController: UIViewController {
     
     private func setConstraints() {
         NSLayoutConstraint.activate([
+            
             scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             scrollView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
             scrollView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
@@ -147,26 +172,37 @@ class LogInViewController: UIViewController {
             contentView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
             contentView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
             
-            logoImageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 60),
+            logoImageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 160),
             logoImageView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             logoImageView.widthAnchor.constraint(equalToConstant: 100),
             logoImageView.heightAnchor.constraint(equalToConstant: 100),
             
-            userNameTextField.topAnchor.constraint(equalTo: logoImageView.bottomAnchor, constant: 60),
-            userNameTextField.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
-            userNameTextField.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
+            roundCornersView.topAnchor.constraint(equalTo: logoImageView.bottomAnchor, constant: 60),
+            roundCornersView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+            roundCornersView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
+            roundCornersView.widthAnchor.constraint(equalTo: contentView.widthAnchor, constant: -32),
+            
+            userNameTextField.topAnchor.constraint(equalTo: roundCornersView.topAnchor),
+            userNameTextField.leadingAnchor.constraint(equalTo: roundCornersView.leadingAnchor),
+            userNameTextField.trailingAnchor.constraint(equalTo: roundCornersView.trailingAnchor),
             userNameTextField.heightAnchor.constraint(equalToConstant: 40),
             
-            userPasswordTextField.topAnchor.constraint(equalTo: userNameTextField.bottomAnchor, constant: 16),
-            userPasswordTextField.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
-            userPasswordTextField.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
-            userPasswordTextField.heightAnchor.constraint(equalToConstant: 40),
+            separatorView.topAnchor.constraint(equalTo: userNameTextField.bottomAnchor),
+            separatorView.leadingAnchor.constraint(equalTo: roundCornersView.leadingAnchor),
+            separatorView.trailingAnchor.constraint(equalTo: roundCornersView.trailingAnchor),
+            separatorView.heightAnchor.constraint(equalToConstant: 0.5),
             
-            loginButton.topAnchor.constraint(equalTo: userPasswordTextField.bottomAnchor, constant: 16),
+            userPasswordTextField.topAnchor.constraint(equalTo: separatorView.bottomAnchor),
+            userPasswordTextField.leadingAnchor.constraint(equalTo: roundCornersView.leadingAnchor),
+            userPasswordTextField.trailingAnchor.constraint(equalTo: roundCornersView.trailingAnchor),
+            userPasswordTextField.heightAnchor.constraint(equalToConstant: 40),
+            userPasswordTextField.bottomAnchor.constraint(equalTo: roundCornersView.bottomAnchor),
+            
+            loginButton.topAnchor.constraint(equalTo: roundCornersView.bottomAnchor, constant: 8),
             loginButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             loginButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
             loginButton.heightAnchor.constraint(equalToConstant: 50),
-            loginButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -16)
+            loginButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -8)
             
         ])
     }
@@ -179,12 +215,5 @@ extension LogInViewController: UITextFieldDelegate {
         view.endEditing(true)
         return true
     }
-    
-    func textFieldDidBeginEditing(_ textField: UITextField)  {
-        textField.layer.borderColor = UIColor.blue.cgColor
-    }
-    
-    func textFieldDidEndEditing(_ textField: UITextField) {
-        textField.layer.borderColor = UIColor.white.cgColor
-    }
 }
+

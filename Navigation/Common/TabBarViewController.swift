@@ -40,7 +40,7 @@ final class TabBarViewController: UITabBarController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        viewControllers = [navigationFeedVC, navigationLoginVC]
+        showLogin()
     }
  
     func showProfile() {

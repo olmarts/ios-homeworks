@@ -15,7 +15,7 @@ final class ProfileHeaderView: UIView {
     private var statusText = String()
     private let defaultStatusText = "Listening to music"
     
-    private var userImageView: UIImageView = {
+    private let userImageView: UIImageView = {
         let imageView = UIImageView(frame: CGRect(x: 0, y: 0, width: 130, height: 130))
         imageView.image = UIImage(imageLiteralResourceName: "png-cat")
         imageView.layer.cornerRadius = imageView.frame.width/2
@@ -26,7 +26,7 @@ final class ProfileHeaderView: UIView {
         return imageView
     }()
     
-    private var userNameLabel: UILabel = {
+    private let userNameLabel: UILabel = {
         let label = UILabel()
         label.text = "Hipster Cat"
         label.font = UIFont.systemFont(ofSize: 18, weight: .bold)
@@ -65,7 +65,7 @@ final class ProfileHeaderView: UIView {
         return textField
     }()
     
-    private var setStatusButton: UIButton = {
+    private let setStatusButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("Set status", for: .normal)
         button.setTitleColor(.white, for: .normal)
@@ -78,7 +78,16 @@ final class ProfileHeaderView: UIView {
         return button
     }()
     
-    func setupView() {
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        setupView()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+   private func setupView() {
         addSubview(userImageView)
         addSubview(userNameLabel)
         addSubview(userStatusLabel)
