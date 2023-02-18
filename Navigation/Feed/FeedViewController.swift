@@ -61,12 +61,12 @@ final class FeedViewController: UIViewController {
     
     @objc func showPostAction() {
         // postId - просто эмулятор уникального идентификатора просматриваемого поста:
-        let postId = Int.random(in: 1000..<10000)
-        let post = Post(title: "Post#\(postId)")
-        
-        let postVC = PostViewController(post: post)
-        postVC.title = post.title
-        navigationController?.pushViewController(postVC, animated: true)
+//        let postId = Int.random(in: 1000..<10000)
+//        let post = Post(title: "Post#\(postId)")
+//        
+//        let postVC = PostViewController(post: post)
+//        postVC.title = post.title
+//        navigationController?.pushViewController(postVC, animated: true)
     }
     
 }

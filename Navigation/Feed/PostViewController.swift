@@ -9,20 +9,11 @@ import UIKit
 // Показывает конкретный один пост в ленте Feed
 final class PostViewController: UIViewController {
     
-    private var post: Post?
     
-    init(post: Post? = nil) {
-        super.init(nibName: nil, bundle: nil)
-        self.post = post
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        title = post?.title
+        //title = post?.title
         view.backgroundColor = .systemGray3
         makeItemBar()
     }

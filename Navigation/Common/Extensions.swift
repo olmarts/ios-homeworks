@@ -9,10 +9,12 @@ import UIKit
 
 extension UIView {
     
-    func constraintsOnly() {
-        self.translatesAutoresizingMaskIntoConstraints = false
+    static var identifier: String {
+        String(describing: self)
     }
+    
 }
+
 
 extension UITextField {
     

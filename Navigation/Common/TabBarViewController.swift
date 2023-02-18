@@ -9,7 +9,7 @@ import UIKit
 
 // Плоский нижний навигатор
 final class TabBarViewController: UITabBarController {
-
+    
     
     private let navigationFeedVC: UINavigationController = {
         let vc = FeedViewController()
@@ -32,9 +32,8 @@ final class TabBarViewController: UITabBarController {
         let vc = ProfileViewController()
         vc.tabBarItem.title = "Profile"
         vc.tabBarItem.image = UIImage(systemName: "person")
-        vc.afterLogoutAction = self.showLogin
         let nav = UINavigationController(rootViewController: vc)
-        nav.navigationBar.isHidden = false
+        nav.navigationBar.isHidden = true
         return nav
     }()
     
@@ -42,11 +41,11 @@ final class TabBarViewController: UITabBarController {
         super.viewDidLoad()
         showLogin()
     }
- 
+    
     func showProfile() {
         viewControllers = [navigationFeedVC, navigationProfileVC]
     }
-
+    
     func showLogin() {
         viewControllers = [navigationFeedVC, navigationLoginVC]
     }
