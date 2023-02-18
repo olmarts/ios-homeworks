@@ -1,75 +1,70 @@
-//
-//  ProfileViewController.swift
-//  Navigation
-//
-//  Created by user1 on 10.02.2023.
-//
-
 import UIKit
 
-class ProfileViewController: UIViewController {
+final class ProfileViewController: UIViewController {
     
-    // Внешняя функция, котора] будет выполнена после Logout:
-    var afterLogoutAction: Optional<() -> ()> = nil
+    private var postModel: [Post] = Post.makeMockModel()
     
-    let profileHeaderView = ProfileHeaderView()
-    
-    private var logoutButton: UIButton = {
-        let button = UIButton(type: .system)
-        button.setTitle("Logout", for: .normal)
-        button.setTitleColor(.lightText, for: .normal)
-        button.backgroundColor = .systemBlue
-        button.translatesAutoresizingMaskIntoConstraints = false
-        button.isHidden = false
-        return button
+    private lazy var tableView: UITableView = {
+        let tableView = UITableView(frame: .zero, style: .plain)
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        tableView.dataSource = self
+        tableView.delegate = self
+        tableView.rowHeight = UITableView.automaticDimension
+        tableView.register(PostTableViewCell.self, forCellReuseIdentifier: PostTableViewCell.identifier )
+        return tableView
     }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setup()
+        layout()
     }
     
-    private func setup() {
-        title = "Profile"
-        profileHeaderView.backgroundColor = .lightGray
-        view.addSubview(profileHeaderView)
-        view.addSubview(logoutButton)
-        logoutButton.addTarget(self, action: #selector(buttonPressed), for: .touchUpInside)
-        setConstraints()
-    }
-    
-    override func viewWillLayoutSubviews() {
-        super.viewWillLayoutSubviews()
-        profileHeaderView.frame = view.bounds
-    }
-    
-    
-    @objc private func buttonPressed() {
-        if let externalFunc = self.afterLogoutAction {
-            externalFunc()
-            print("Log out!")
-        }
-    }
-    
-    private func setConstraints() {
-        profileHeaderView.translatesAutoresizingMaskIntoConstraints = false
+    private func layout() {
+        view.addSubview(tableView)
+        tableView.tableHeaderView = ProfileTableHeaderView(frame: CGRect(x: 0, y: 0, width: tableView.frame.width, height: 250))
+        tableView.backgroundColor = .systemGray4
         
         NSLayoutConstraint.activate([
-            
-            profileHeaderView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            profileHeaderView.leftAnchor.constraint(equalTo: view.leftAnchor),
-            profileHeaderView.rightAnchor.constraint(equalTo: view.rightAnchor),
-            profileHeaderView.heightAnchor.constraint(greaterThanOrEqualToConstant: 220),
-            
-            logoutButton.leftAnchor.constraint(equalTo: view.leftAnchor),
-            logoutButton.rightAnchor.constraint(equalTo: view.rightAnchor),
-            logoutButton.heightAnchor.constraint(equalToConstant: 50),
-            logoutButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
-            
+            tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            tableView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            tableView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
         ])
     }
-    
-    
 }
+
+
+extension ProfileViewController: UITableViewDataSource {
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return self.postModel.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell: PostTableViewCell = tableView.dequeueReusableCell(withIdentifier: PostTableViewCell.identifier, for: indexPath) as! PostTableViewCell
+        cell.setupCell(model: postModel[indexPath.row])
+        return cell
+    }
+}
+
+
+extension ProfileViewController: UITableViewDelegate {
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return UITableView.automaticDimension
+    }
+    
+    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        return true
+    }
+    
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            postModel.remove(at: indexPath.row)
+            tableView.deleteRows(at: [indexPath], with: .fade)
+        }
+    }
+}
+
 
 

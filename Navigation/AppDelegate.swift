@@ -25,19 +25,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window?.backgroundColor = .systemGray4
         window?.rootViewController = TabBarViewController()
         window?.makeKeyAndVisible()
-        setup()
         return true
-    }
-    
-    func setup() {
-        // Верхний навбар - фон, текст тайтла, текст кнопок:
-        UINavigationBar.appearance().backgroundColor  = .darkGray.withAlphaComponent(0.9)
-        UINavigationBar.appearance().tintColor  = .lightText
-        UINavigationBar.appearance().titleTextAttributes = [NSAttributedString.Key.foregroundColor : UIColor.lightText]
-        // Нижний таббар - фон, текст активного таба:
-        UITabBar.appearance().backgroundColor = .darkGray.withAlphaComponent(0.9)
-        UITabBar.appearance().tintColor = .lightText
-        UITabBar.appearance().unselectedItemTintColor = UIColor(hex: "#cccccc", alpha: 0.5)
     }
 }
 

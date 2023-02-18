@@ -1,13 +1,6 @@
-//
-//  ProfileHeaderView.swift
-//  Navigation
-//
-//  Created by user1 on 10.02.2023.
-//
-
 import UIKit
 
-final class ProfileHeaderView: UIView {
+final class ProfileTableHeaderView: UIView {
     
     // Уведомлять о появлении/скрытии клавиатуры:
     private let notification = NotificationCenter.default
@@ -17,41 +10,43 @@ final class ProfileHeaderView: UIView {
     
     private let userImageView: UIImageView = {
         let imageView = UIImageView(frame: CGRect(x: 0, y: 0, width: 130, height: 130))
+        imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.image = UIImage(imageLiteralResourceName: "png-cat")
         imageView.layer.cornerRadius = imageView.frame.width/2
         imageView.layer.masksToBounds = true
         imageView.layer.borderWidth = 3
         imageView.layer.borderColor = UIColor.white.cgColor
-        imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
     }()
     
     private let userNameLabel: UILabel = {
         let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "Hipster Cat"
+        label.numberOfLines = 2
         label.font = UIFont.systemFont(ofSize: 18, weight: .bold)
         label.textColor = .black
         label.adjustsFontSizeToFitWidth = true
         label.minimumScaleFactor = 0.7
-        label.numberOfLines = 2
-        label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
     private lazy var userStatusLabel: UILabel = {
         let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
         label.text = defaultStatusText
+        label.numberOfLines = 3
         label.font = UIFont.systemFont(ofSize: 14, weight: .regular)
         label.textColor = .darkGray
         label.adjustsFontSizeToFitWidth = true
         label.minimumScaleFactor = 0.7
-        label.numberOfLines = 3
-        label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
     private lazy var statusTextField: UITextField = {
         let textField = UITextField()
+        textField.setPadding(left: 16, right: 16)
+        textField.delegate = self
         textField.placeholder = defaultStatusText
         textField.font = UIFont.systemFont(ofSize: 15, weight: .regular)
         textField.textColor = .black
@@ -60,13 +55,12 @@ final class ProfileHeaderView: UIView {
         textField.layer.borderColor = UIColor.black.cgColor
         textField.backgroundColor = .white
         textField.translatesAutoresizingMaskIntoConstraints = false
-        textField.setPadding(left: 16, right: 16)
-        textField.delegate = self
         return textField
     }()
     
     private let setStatusButton: UIButton = {
         let button = UIButton(type: .system)
+        button.translatesAutoresizingMaskIntoConstraints = false
         button.setTitle("Set status", for: .normal)
         button.setTitleColor(.white, for: .normal)
         button.backgroundColor = .systemBlue
@@ -74,7 +68,6 @@ final class ProfileHeaderView: UIView {
         button.layer.shadowOffset = CGSize(width: 4, height: 4)
         button.layer.shadowColor = UIColor.black.cgColor
         button.layer.shadowOpacity = 0.7
-        button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
     
@@ -87,7 +80,7 @@ final class ProfileHeaderView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-   private func setupView() {
+    private func setupView() {
         addSubview(userImageView)
         addSubview(userNameLabel)
         addSubview(userStatusLabel)
@@ -144,7 +137,7 @@ final class ProfileHeaderView: UIView {
     }
 }
 
-extension ProfileHeaderView: UITextFieldDelegate {
+extension ProfileTableHeaderView: UITextFieldDelegate {
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         endEditing(true)

@@ -9,18 +9,12 @@ import UIKit
 
 extension UIView {
     
-    func constraintsOnly() -> UIView {
-        self.translatesAutoresizingMaskIntoConstraints = false
-        return self
-    }
-    
-    func addSubviews(_ views: UIView...) {
-        for view in views {
-            self.addSubview(view)
-        }
+    static var identifier: String {
+        String(describing: self)
     }
     
 }
+
 
 extension UITextField {
     
