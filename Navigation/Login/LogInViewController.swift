@@ -1,16 +1,3 @@
-/**
-Замечание:
-А вот текстфилды с логином и паролем нужно поместить в UIStackView. Границы и скругление уже сделаете непосредственно у стеквью.
-
-Решение:
-Я сделал границы и скругление непосредственно у стеквью, но таким образом стеквью
-получился с высотой в 2 текстФилда+0.5 = 80.5 пойнтов,
-После чего при повороте на 90 ерадусов, экран перестал скроллироваться ,
-так как логотип (который переместился над стеквью) так занимает все место на экране.
-Поэтому границы и закругления сделал в отдельной вью куда поместил текстфилды и разделитель.
-Все остальные замечания исправлены.
- */
-
 import UIKit
 
 final class LogInViewController: UIViewController {
@@ -113,11 +100,8 @@ final class LogInViewController: UIViewController {
         view.backgroundColor = .white
         view.addSubview(scrollView)
         scrollView.addSubview(contentView)
-        contentView.addSubview(logoImageView)
-        contentView.addSubview(roundCornersView)
-        roundCornersView.addSubview(userNameTextField)
-        roundCornersView.addSubview(separatorView)
-        roundCornersView.addSubview(userPasswordTextField)
+        [logoImageView, roundCornersView].forEach({ contentView.addSubview($0) })
+        [userNameTextField, separatorView, userPasswordTextField].forEach({ roundCornersView.addSubview($0) })
         contentView.addSubview(loginButton)
         setConstraints()
         loginButton.addTarget(self, action: #selector(buttonPressed), for: .touchUpInside)
@@ -215,5 +199,6 @@ extension LogInViewController: UITextFieldDelegate {
         view.endEditing(true)
         return true
     }
+    
 }
 
