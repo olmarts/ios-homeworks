@@ -14,14 +14,14 @@ final class TabBarViewController: UITabBarController {
     private let navigationFeedVC: UINavigationController = {
         let vc = FeedViewController()
         vc.tabBarItem.title = "Feed"
-        vc.tabBarItem.image = UIImage(systemName: "house")
+        vc.tabBarItem.image = UIImage(systemName: "house.fill")
         return UINavigationController(rootViewController: vc)
     }()
     
     private lazy var navigationLoginVC: UINavigationController = {
         let vc = LogInViewController()
         vc.tabBarItem.title = "Profile"
-        vc.tabBarItem.image = UIImage(systemName: "person.badge.clock")
+        vc.tabBarItem.image = UIImage(systemName: "person.badge.clock.fill")
         vc.afterLogonAction = self.showProfile
         let nav = UINavigationController(rootViewController: vc)
         nav.navigationBar.isHidden = true
@@ -31,7 +31,7 @@ final class TabBarViewController: UITabBarController {
     private lazy var navigationProfileVC: UINavigationController = {
         let vc = ProfileViewController()
         vc.tabBarItem.title = "Profile"
-        vc.tabBarItem.image = UIImage(systemName: "person")
+        vc.tabBarItem.image = UIImage(systemName: "person.fill")
         let nav = UINavigationController(rootViewController: vc)
         nav.navigationBar.isHidden = true
         return nav

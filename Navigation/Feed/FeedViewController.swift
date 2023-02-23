@@ -17,8 +17,7 @@ final class FeedViewController: UIViewController {
         stackView.distribution = .fill
         stackView.spacing = 10
         return stackView
-    }()
-    
+    }()    
     
     private let showPostButton: UIButton = {
         let button = UIButton(frame: CGRect(x: 50 , y: 50, width: 150, height: 40))
@@ -47,6 +46,7 @@ final class FeedViewController: UIViewController {
         view.addSubview(stackView)
         stackView.addArrangedSubview(showPostButton)
         stackView.addArrangedSubview(editPostButton)
+        
         NSLayoutConstraint.activate([
             stackView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 16),
             stackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
@@ -61,12 +61,11 @@ final class FeedViewController: UIViewController {
     
     @objc func showPostAction() {
         // postId - просто эмулятор уникального идентификатора просматриваемого поста:
-//        let postId = Int.random(in: 1000..<10000)
-//        let post = Post(title: "Post#\(postId)")
-//        
-//        let postVC = PostViewController(post: post)
-//        postVC.title = post.title
-//        navigationController?.pushViewController(postVC, animated: true)
+        //let postId = Int.random(in: 1000..<10000)
+        let post = Post.makeMockModel().first
+        let postVC = PostViewController(post: post)
+        postVC.title = post?.author
+        navigationController?.pushViewController(postVC, animated: true)
     }
     
 }

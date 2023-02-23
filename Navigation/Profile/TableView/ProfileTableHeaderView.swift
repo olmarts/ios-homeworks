@@ -9,7 +9,7 @@ final class ProfileTableHeaderView: UIView {
     private let defaultStatusText = "Listening to music"
     
     private let userImageView: UIImageView = {
-        let imageView = UIImageView(frame: CGRect(x: 0, y: 0, width: 130, height: 130))
+        let imageView = UIImageView(frame: CGRect(x: 0, y: 0, width: 100, height: 100))
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.image = UIImage(imageLiteralResourceName: "png-cat")
         imageView.layer.cornerRadius = imageView.frame.width/2
@@ -73,19 +73,16 @@ final class ProfileTableHeaderView: UIView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        setupView()
+        setup()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    private func setupView() {
-        addSubview(userImageView)
-        addSubview(userNameLabel)
-        addSubview(userStatusLabel)
-        addSubview(statusTextField)
-        addSubview(setStatusButton)
+    private func setup() {
+        backgroundColor = .systemGray3
+        [userImageView, userNameLabel, userStatusLabel, statusTextField, setStatusButton].forEach({ addSubview($0) })
         setConstraints()
         setStatusButton.addTarget(self, action: #selector(buttonPressed), for: .touchUpInside)
         statusTextField.addTarget(self, action: #selector(statusTextChanged), for: .editingChanged)
@@ -110,18 +107,18 @@ final class ProfileTableHeaderView: UIView {
             
             userImageView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 16),
             userImageView.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor, constant: 16),
-            userImageView.widthAnchor.constraint(equalToConstant: 130),
-            userImageView.heightAnchor.constraint(equalToConstant: 130),
+            userImageView.widthAnchor.constraint(equalToConstant: 100),
+            userImageView.heightAnchor.constraint(equalToConstant: 100),
             
             userNameLabel.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 27),
             userNameLabel.leadingAnchor.constraint(equalTo: userImageView.trailingAnchor, constant: 16),
             userNameLabel.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: -16),
             
-            userStatusLabel.topAnchor.constraint(greaterThanOrEqualTo: userNameLabel.bottomAnchor, constant: 16),
+            userStatusLabel.topAnchor.constraint(equalTo: userNameLabel.bottomAnchor, constant: 16),
             userStatusLabel.leadingAnchor.constraint(equalTo: userImageView.trailingAnchor, constant: 16),
             userStatusLabel.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: -16),
             
-            statusTextField.topAnchor.constraint(equalTo: userStatusLabel.bottomAnchor, constant: 8),
+            statusTextField.topAnchor.constraint(greaterThanOrEqualTo: userStatusLabel.bottomAnchor, constant: 8),
             statusTextField.leadingAnchor.constraint(equalTo: userImageView.trailingAnchor, constant: 16),
             statusTextField.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: -16),
             statusTextField.heightAnchor.constraint(equalToConstant: 40),
@@ -142,14 +139,6 @@ extension ProfileTableHeaderView: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         endEditing(true)
         return true
-    }
-    
-    func textFieldDidBeginEditing(_ textField: UITextField)  {
-        textField.layer.borderColor = UIColor.blue.cgColor
-    }
-    
-    func textFieldDidEndEditing(_ textField: UITextField) {
-        textField.layer.borderColor = UIColor.black.cgColor
     }
 }
 
