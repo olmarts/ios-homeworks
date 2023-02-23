@@ -27,6 +27,7 @@
 		7F4C1B5929A62B8C0022A4A2 /* UICollectionViewFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F4C1B5829A62B8C0022A4A2 /* UICollectionViewFlowLayout.swift */; };
 		7F7D852F299B2D1600D1BC33 /* LogInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F7D852E299B2D1600D1BC33 /* LogInViewController.swift */; };
 		7FAC461C29964B3D004D294F /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FAC461B29964B3D004D294F /* ProfileViewController.swift */; };
+		7FB2932029B0D39A00FEFD53 /* ProfileAnimationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FB2931F29B0D39A00FEFD53 /* ProfileAnimationView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -52,6 +53,7 @@
 		7F4C1B5829A62B8C0022A4A2 /* UICollectionViewFlowLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UICollectionViewFlowLayout.swift; sourceTree = "<group>"; };
 		7F7D852E299B2D1600D1BC33 /* LogInViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogInViewController.swift; sourceTree = "<group>"; };
 		7FAC461B29964B3D004D294F /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
+		7FB2931F29B0D39A00FEFD53 /* ProfileAnimationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileAnimationView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -148,11 +150,20 @@
 		7FAC461629964917004D294F /* Profile */ = {
 			isa = PBXGroup;
 			children = (
+				7FB2932129B1033600FEFD53 /* Animation */,
 				7F4C1B4829A4BF2F0022A4A2 /* Photos */,
 				7F2D038A29A087C0009BF594 /* TableView */,
 				7FAC461B29964B3D004D294F /* ProfileViewController.swift */,
 			);
 			path = Profile;
+			sourceTree = "<group>";
+		};
+		7FB2932129B1033600FEFD53 /* Animation */ = {
+			isa = PBXGroup;
+			children = (
+				7FB2931F29B0D39A00FEFD53 /* ProfileAnimationView.swift */,
+			);
+			path = Animation;
 			sourceTree = "<group>";
 		};
 		7FC365E3299A061300722B2A /* Feed */ = {
@@ -244,6 +255,7 @@
 				7F2F98732992892C00BB5C1B /* InfoViewController.swift in Sources */,
 				7F2F986D299288DA00BB5C1B /* FeedViewController.swift in Sources */,
 				7FAC461C29964B3D004D294F /* ProfileViewController.swift in Sources */,
+				7FB2932029B0D39A00FEFD53 /* ProfileAnimationView.swift in Sources */,
 				7F4C1B5329A53BFB0022A4A2 /* PhotosViewController.swift in Sources */,
 				7F4C1B4D29A4FE8E0022A4A2 /* UIColor.swift in Sources */,
 				7F4C1B5129A500B50022A4A2 /* UIView.swift in Sources */,

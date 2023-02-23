@@ -23,6 +23,10 @@ final class ProfileViewController: UIViewController {
         layout()
     }
     
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        print(#function, size)
+    }
+    
     private func layout() {
         view.addSubview(tableView)
         tableView.backgroundColor = .systemGray4
@@ -36,10 +40,11 @@ final class ProfileViewController: UIViewController {
         ])
     }
     
-    func pushPhotosViewController() {
+    func pushPhotosViewController(imageIndex: Int) {
         let photosVC = PhotosViewController()
         photosVC.title = "Photo Gallery"
         photosVC.parentNavigationController = self.navigationController
+        photosVC.selectPhoto(imageIndex: imageIndex)
         navigationController?.navigationBar.isHidden = false
         navigationController?.pushViewController(photosVC, animated: true)
     }
@@ -61,9 +66,9 @@ extension ProfileViewController: UITableViewDataSource {
         switch indexPath.section {
         case 0:
             let cell: PhotosTableViewCell = tableView.dequeueReusableCell(withIdentifier: PhotosTableViewCell.identifier, for: indexPath) as! PhotosTableViewCell
-            cell.didTapButton = pushPhotosViewController
+            cell.showPhotoGallery = pushPhotosViewController
             return cell
-        
+            
         default:
             if let post: Post = model[indexPath.section][indexPath.row] as? Post {
                 let cell: PostTableViewCell = tableView.dequeueReusableCell(withIdentifier: PostTableViewCell.identifier, for: indexPath) as! PostTableViewCell
@@ -77,6 +82,7 @@ extension ProfileViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        //print(#function, self.view.bounds.size)
         return section == 0 ? ProfileTableHeaderView() : nil
     }
     
