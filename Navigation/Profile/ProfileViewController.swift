@@ -13,18 +13,14 @@ final class ProfileViewController: UIViewController {
         tableView.sectionFooterHeight = .zero
         tableView.dataSource = self
         tableView.delegate = self
-        tableView.register(PhotosTableViewCell.self, forCellReuseIdentifier: PhotosTableViewCell.identifier )
-        tableView.register(PostTableViewCell.self, forCellReuseIdentifier: PostTableViewCell.identifier )
+        tableView.register(PhotosTableViewCell.self, forCellReuseIdentifier: PhotosTableViewCell.identifier)
+        tableView.register(PostTableViewCell.self, forCellReuseIdentifier: PostTableViewCell.identifier)
         return tableView
     }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         layout()
-    }
-    
-    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
-        print(#function, size)
     }
     
     private func layout() {
@@ -36,7 +32,6 @@ final class ProfileViewController: UIViewController {
             tableView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
             tableView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
             tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
-            
         ])
     }
     

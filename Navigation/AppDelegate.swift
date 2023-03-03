@@ -1,18 +1,3 @@
-//
-//  AppDelegate.swift
-//  Navigation
-//
-//  Created by user1 on 06.02.2023.
-//
-
-/*
- 3. В AppDelegate.swift добавьте UITabBarController.
- 
- Проблема после выпиливания SceneDelegate:
- Если в симуляторе backgroundColor станет черным, то
- в Info.plist удалить ВСЮ ветку 'Scene Configuration'.
- */
-
 import UIKit
 
 @main

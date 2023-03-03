@@ -2,29 +2,27 @@ import UIKit
 
 final class ProfileAnimationView: UIView {
     
-    // оригинальный аватар, так как потребуются его свойства:
     private let originalImageView: UIImageView
+    private let avatarImageView: UIImageView
     
-    // анимируемый аватар, чтобы не менять свойства оригинального аватара:
-    private let userImageView: UIImageView
-    
-    private let closeButton: UIButton = {
+    private lazy var closeButton: UIButton = {
         let button = UIButton(type: .close)
         button.translatesAutoresizingMaskIntoConstraints = false
+        button.alpha = 0
         button.backgroundColor = .white
+        button.tintColor = .black
+        button.addTarget(self, action: #selector(closeAction), for: .touchUpInside)
         return button
     }()
     
-    private lazy var widthConstraint: NSLayoutConstraint = userImageView.widthAnchor.constraint(equalToConstant: originalImageView.bounds.width)
-    private lazy var heightConstraint: NSLayoutConstraint = userImageView.heightAnchor.constraint(equalToConstant: originalImageView.bounds.height)
+    private lazy var widthConstraint: NSLayoutConstraint = avatarImageView.widthAnchor.constraint(equalToConstant: originalImageView.bounds.width)
+    private lazy var heightConstraint: NSLayoutConstraint = avatarImageView.heightAnchor.constraint(equalToConstant: originalImageView.bounds.height)
     
     init(originalView: UIImageView) {
         originalImageView = originalView
-        userImageView = originalView.cloneObject()!
+        avatarImageView = originalView.cloneObject()!
         super.init(frame: UIScreen.main.bounds)
         setup()
-        // на весь экран (на главный UIWindow):
-        self.addToWindow()
     }
     
     required init?(coder: NSCoder) {
@@ -33,12 +31,10 @@ final class ProfileAnimationView: UIView {
     
     private func setup() {
         backgroundColor = .black
-        addSubview(userImageView)
+        addSubview(avatarImageView)
         addSubview(closeButton)
-        closeButton.addTarget(self, action: #selector(closeAction), for: .touchUpInside)
         
         NSLayoutConstraint.activate([
-            topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor),
             widthConstraint, heightConstraint,
             closeButton.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor),
             closeButton.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor),
@@ -46,15 +42,14 @@ final class ProfileAnimationView: UIView {
     }
     
     func animateView() {
-        alpha = 1
-        closeButton.alpha = 0
+        avatarImageView.layer.cornerRadius = originalImageView.layer.cornerRadius
         UIView.animate(withDuration: 0.5, delay: 0, options: .curveEaseInOut, animations: {
-            self.widthConstraint.constant = self.bounds.width
+            self.avatarImageView.layer.cornerRadius = 0
+            self.widthConstraint.constant = min(self.bounds.width, self.bounds.height)
             self.heightConstraint.constant = self.widthConstraint.constant
             self.layoutIfNeeded()
-            self.userImageView.center = self.center
-            self.userImageView.layer.cornerRadius = 0
-            self.alpha = 0.7
+            self.avatarImageView.center = self.center
+            self.backgroundColor = .black.withAlphaComponent(0.6)
         }) { _ in
             UIView.animate(withDuration: 0.3) {
                 self.closeButton.alpha = 1
@@ -67,9 +62,9 @@ final class ProfileAnimationView: UIView {
             self.widthConstraint.constant = self.originalImageView.bounds.width
             self.heightConstraint.constant = self.originalImageView.bounds.height
             self.layoutIfNeeded()
-            self.userImageView.center = self.originalImageView.center
-            self.userImageView.layer.cornerRadius = self.originalImageView.layer.cornerRadius
-            self.alpha = 1
+            self.avatarImageView.center = self.originalImageView.center
+            self.avatarImageView.layer.cornerRadius = self.originalImageView.layer.cornerRadius
+            self.backgroundColor = .black.withAlphaComponent(1.0)
         }, completion: { _ in
             UIView.animate(withDuration: 0.3) {
                 self.closeButton.alpha = 0

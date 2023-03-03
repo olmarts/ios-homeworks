@@ -14,20 +14,15 @@ extension UIView {
             fatalError("This UIApplication has'nt any UIWindow instances.")
         }
     }
-//}
-//
-//extension NSObject {
     
-    func cloneObject<T:NSObject>() -> T? {
+    func cloneObject<T:UIView>() -> T? {
         do {
             // create an NSData object from self:
             let data = try NSKeyedArchiver.archivedData(withRootObject:self, requiringSecureCoding:false)
             // a clone by unarchiving the NSData:
             return try NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(data) as? T
         }
-        catch {
-            return nil
-        }
+        catch { return nil }
     }
     
 }

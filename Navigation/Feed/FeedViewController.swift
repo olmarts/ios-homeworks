@@ -1,13 +1,5 @@
-//
-//  FeedViewController.swift
-//  Navigation
-//
-//  Created by user1 on 06.02.2023.
-//
-
 import UIKit
 
-// Показывает ленту постов
 final class FeedViewController: UIViewController {
     
     private let stackView: UIStackView = {
@@ -17,21 +9,21 @@ final class FeedViewController: UIViewController {
         stackView.distribution = .fill
         stackView.spacing = 10
         return stackView
-    }()    
+    }()
     
     private let showPostButton: UIButton = {
-        let button = UIButton(frame: CGRect(x: 50 , y: 50, width: 150, height: 40))
+        let button = UIButton(frame: Metric.buttonRect)
         button.setTitle("Show post", for: .normal)
         button.backgroundColor = .systemBlue
-        button.layer.cornerRadius = 10
+        button.layer.cornerRadius = Metric.buttonCornerRadius
         return button
     }()
     
     private let editPostButton: UIButton = {
-        let button = UIButton(frame: CGRect(x: 50 , y: 50, width: 150, height: 40))
+        let button = UIButton(frame: Metric.buttonRect)
         button.setTitle("Edit post", for: .normal)
         button.backgroundColor = .systemBlue
-        button.layer.cornerRadius = 10
+        button.layer.cornerRadius = Metric.buttonCornerRadius
         return button
     }()
     
@@ -48,9 +40,9 @@ final class FeedViewController: UIViewController {
         stackView.addArrangedSubview(editPostButton)
         
         NSLayoutConstraint.activate([
-            stackView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 16),
-            stackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            stackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            stackView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: Metric.inset),
+            stackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: Metric.inset),
+            stackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -Metric.inset),
         ])
     }
     
@@ -60,8 +52,6 @@ final class FeedViewController: UIViewController {
     }
     
     @objc func showPostAction() {
-        // postId - просто эмулятор уникального идентификатора просматриваемого поста:
-        //let postId = Int.random(in: 1000..<10000)
         let post = Post.makeMockModel().first
         let postVC = PostViewController(post: post)
         postVC.title = post?.author
@@ -70,3 +60,12 @@ final class FeedViewController: UIViewController {
     
 }
 
+extension FeedViewController {
+    
+    private enum Metric {
+        static let inset: CGFloat = 16
+        static let buttonRect: CGRect = CGRect(origin: CGPoint(x: 50, y: 50), size: CGSize(width: 150, height: 40))
+        static let buttonCornerRadius: CGFloat = 10
+    }
+    
+}

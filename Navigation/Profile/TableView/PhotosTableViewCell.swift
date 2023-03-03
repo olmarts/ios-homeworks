@@ -23,7 +23,6 @@ final class PhotosTableViewCell: UITableViewCell {
         return button
     }()
     
-    // высота для использования констрейнтом:
     private var collectionViewHeight: CGFloat = 0
     
     private lazy var collectionView: UICollectionView = {
@@ -47,7 +46,6 @@ final class PhotosTableViewCell: UITableViewCell {
         setup()
     }
     
-    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -58,9 +56,8 @@ final class PhotosTableViewCell: UITableViewCell {
         
         galleryButton.addTarget(self, action: #selector(buttonPressed), for: .touchUpInside)
         [titleLabel, galleryButton, collectionView].forEach({ addSubview($0) })
-      
+        
         NSLayoutConstraint.activate([
-            
             titleLabel.topAnchor.constraint(equalTo: topAnchor, constant: Metric.inset),
             titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: Metric.inset),
             

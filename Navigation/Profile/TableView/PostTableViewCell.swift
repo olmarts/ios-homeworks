@@ -70,34 +70,37 @@ final class PostTableViewCell: UITableViewCell {
     private func layout() {
         [authorText, imgView, descriptionText, likesText, viewsText].forEach { contentView.addSubview($0) }
         contentView.layer.borderWidth = 0
-        
-        let inset: CGFloat = 16
-        let imageHeight: CGFloat = min(UIScreen.main.bounds.width, UIScreen.main.bounds.height) - (inset*2)
+        let imageHeight: CGFloat = min(UIScreen.main.bounds.width, UIScreen.main.bounds.height) - (Metric.inset*2)
         
         NSLayoutConstraint.activate([
-            authorText.topAnchor.constraint(equalTo: contentView.topAnchor, constant: inset),
-            authorText.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: inset),
-            authorText.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -inset),
+            authorText.topAnchor.constraint(equalTo: contentView.topAnchor, constant: Metric.inset),
+            authorText.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: Metric.inset),
+            authorText.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -Metric.inset),
             
-            /* обе вертикальные границы картинки выводим за экран, чтобы показать только
-             горизонтальные границы (актуально для картинок со светлым непрозрачным фоном). */
-            imgView.topAnchor.constraint(equalTo: authorText.bottomAnchor, constant: inset),
+            imgView.topAnchor.constraint(equalTo: authorText.bottomAnchor, constant: Metric.inset),
             imgView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: -0.5),
             imgView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: 0.5),
             imgView.heightAnchor.constraint(equalToConstant: imageHeight),
             
-            descriptionText.topAnchor.constraint(equalTo: imgView.bottomAnchor, constant: inset),
-            descriptionText.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: inset),
-            descriptionText.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -inset),
+            descriptionText.topAnchor.constraint(equalTo: imgView.bottomAnchor, constant: Metric.inset),
+            descriptionText.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: Metric.inset),
+            descriptionText.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -Metric.inset),
             
-            likesText.topAnchor.constraint(equalTo: descriptionText.bottomAnchor, constant: inset),
-            likesText.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: inset),
-            likesText.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -inset),
+            likesText.topAnchor.constraint(equalTo: descriptionText.bottomAnchor, constant: Metric.inset),
+            likesText.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: Metric.inset),
+            likesText.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -Metric.inset),
             
-            viewsText.topAnchor.constraint(equalTo: descriptionText.bottomAnchor, constant: inset),
-            viewsText.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -inset),
-            viewsText.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -inset),
+            viewsText.topAnchor.constraint(equalTo: descriptionText.bottomAnchor, constant: Metric.inset),
+            viewsText.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -Metric.inset),
+            viewsText.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -Metric.inset),
         ])
     }
     
+}
+
+extension PostTableViewCell {
+    
+    private struct Metric {
+        static let inset: CGFloat = 16
+    }
 }
