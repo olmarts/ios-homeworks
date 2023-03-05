@@ -23,9 +23,7 @@ final class PhotosCollectionViewCell: UICollectionViewCell {
     
     func setImage(image: UIImage, cornerRadius: CGFloat = 0) {
         imageView.image = image
-        if cornerRadius > 0 {
-            imageView.layer.cornerRadius = cornerRadius
-        }
+        if cornerRadius > 0 { imageView.layer.cornerRadius = cornerRadius }
     }
     
     private func setup() {
@@ -36,8 +34,10 @@ final class PhotosCollectionViewCell: UICollectionViewCell {
             imageView.leadingAnchor.constraint(equalTo: leadingAnchor),
             imageView.trailingAnchor.constraint(equalTo: trailingAnchor),
             imageView.bottomAnchor.constraint(equalTo: bottomAnchor),
-            
         ])
     }
     
 }
+
+
+

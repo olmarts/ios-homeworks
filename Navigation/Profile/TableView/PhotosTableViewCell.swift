@@ -3,7 +3,7 @@ import UIKit
 final class PhotosTableViewCell: UITableViewCell {
     
     // функция назначается контроллером, в котором определен UITableView:
-    var didTapButton: (() -> Void)? = nil
+    var showPhotoGallery: ((Int) -> Void)? = nil
     
     private let model: [UIImage] = Photos.makeMockModel(maxCount: 4)
     
@@ -23,21 +23,20 @@ final class PhotosTableViewCell: UITableViewCell {
         return button
     }()
     
-    // высота для констрейнта:
     private var collectionViewHeight: CGFloat = 0
     
     private lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
-        let rowWidth = min(UIScreen.main.bounds.width, UIScreen.main.bounds.height) - 24 // inset: 12*2
-        let cellSpacing: CGFloat = 8
-        let cellWidth = layout.calcCellWidth(rowWidth: rowWidth, cellSpacing: cellSpacing, cellsInRow: 4)
-        self.collectionViewHeight = cellWidth
-        layout.itemSize = CGSize(width: cellWidth, height: self.collectionViewHeight)
-        layout.minimumInteritemSpacing = cellSpacing
+        layout.minimumInteritemSpacing = Metric.cellSpacing
+        let rowWidth = min(UIScreen.main.bounds.width, UIScreen.main.bounds.height) - Metric.inset*2
+        let cellWidth = layout.calcCellWidth(rowWidth: rowWidth, cellSpacing: Metric.cellSpacing, cellsInRow: Metric.cellsInRow)
+        layout.itemSize = CGSize(width: cellWidth, height: cellWidth * 1.0)
+        self.collectionViewHeight = layout.itemSize.height
         
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.dataSource = self
+        collectionView.delegate = self
         collectionView.register(PhotosCollectionViewCell.self,  forCellWithReuseIdentifier: PhotosCollectionViewCell.identifier)
         return collectionView
     }()
@@ -54,29 +53,38 @@ final class PhotosTableViewCell: UITableViewCell {
     private func setup() {
         // установить isUserInteractionEnabled именно ДО addSubview(..) чтобы включились все addTarget из ячейки таблицы:
         contentView.isUserInteractionEnabled = true
-        galleryButton.addTarget(self, action: #selector(buttonPressed), for: .touchUpInside)
         
+        galleryButton.addTarget(self, action: #selector(buttonPressed), for: .touchUpInside)
         [titleLabel, galleryButton, collectionView].forEach({ addSubview($0) })
-        let inset: CGFloat = 12
+        
         NSLayoutConstraint.activate([
-            
-            titleLabel.topAnchor.constraint(equalTo: topAnchor, constant: inset),
-            titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: inset),
+            titleLabel.topAnchor.constraint(equalTo: topAnchor, constant: Metric.inset),
+            titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: Metric.inset),
             
             galleryButton.centerYAnchor.constraint(equalTo: titleLabel.centerYAnchor),
-            galleryButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -inset),
+            galleryButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -Metric.inset),
             
-            collectionView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: inset),
-            collectionView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: inset),
-            collectionView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -inset),
+            collectionView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: Metric.inset),
+            collectionView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: Metric.inset),
+            collectionView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -Metric.inset),
             collectionView.heightAnchor.constraint(equalToConstant: collectionViewHeight),
-            collectionView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -inset),
+            collectionView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -Metric.inset),
             
         ])
     }
     
     @objc private func buttonPressed() {
-        if let action = self.didTapButton { action() }
+        if let action = self.showPhotoGallery { action(-1) }
+    }
+    
+}
+
+extension PhotosTableViewCell {
+    
+    private enum Metric {
+        static let cellsInRow: CGFloat = 4
+        static let cellSpacing: CGFloat = 8
+        static let inset: CGFloat = 12
     }
     
 }
@@ -91,6 +99,15 @@ extension PhotosTableViewCell: UICollectionViewDataSource {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PhotosCollectionViewCell.identifier, for: indexPath) as! PhotosCollectionViewCell
         cell.setImage(image: self.model[indexPath.row], cornerRadius: 6)
         return cell
+    }
+    
+}
+
+extension PhotosTableViewCell: UICollectionViewDelegate {
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        // покажем галерею с выделенной фоткой:
+        if let action = self.showPhotoGallery { action(indexPath.row) }
     }
     
 }

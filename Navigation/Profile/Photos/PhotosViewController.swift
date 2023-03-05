@@ -1,30 +1,22 @@
-//
-//  PhotosViewController.swift
-//  Navigation
-//
-//  Created by user1 on 22.02.2023.
-//
-
 import UIKit
 
 final class PhotosViewController: UIViewController {
     
-    var parentNavigationController: UINavigationController? = nil
+    weak var parentNavigationController: UINavigationController? = nil
     
     private let model: [UIImage] = Photos.makeMockModel(maxCount: 24)
     
     private lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
-        let rowWidth = min(view.bounds.width, view.bounds.height) - 16 // inset: 8*2
-        let cellSpacing: CGFloat = 8
-        let cellWidth = layout.calcCellWidth(rowWidth: rowWidth, cellSpacing: cellSpacing, cellsInRow: 3)
-        layout.minimumInteritemSpacing = cellSpacing
-        //layout.sectionInset = UIEdgeInsets(top: cellPadding, left: cellPadding, bottom: cellPadding, right: cellPadding)
-        layout.itemSize = CGSize(width: cellWidth, height: cellWidth*1.0)
+        let rowWidth = min(view.bounds.width, view.bounds.height) - Metric.inset*2
+        let cellWidth = layout.calcCellWidth(rowWidth: rowWidth, cellSpacing: Metric.cellSpacing, cellsInRow: Metric.cellsInRow)
+        layout.minimumInteritemSpacing = Metric.cellSpacing
+        layout.itemSize = CGSize(width: cellWidth, height: cellWidth)
         
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.dataSource = self
+        collectionView.delegate = self
         collectionView.register(PhotosCollectionViewCell.self,  forCellWithReuseIdentifier: PhotosCollectionViewCell.identifier)
         return collectionView
     }()
@@ -36,18 +28,26 @@ final class PhotosViewController: UIViewController {
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        if let nav = parentNavigationController { nav.navigationBar.isHidden = true }
+        parentNavigationController?.navigationBar.isHidden = true
     }
     
     private func setup() {
+        view.backgroundColor = .systemGray6
         view.addSubview(collectionView)
-        let inset: CGFloat = 8
         NSLayoutConstraint.activate([
-            collectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: inset),
-            collectionView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: inset),
-            collectionView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -inset),
-            collectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -inset),
+            collectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: Metric.inset),
+            collectionView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: Metric.inset),
+            collectionView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -Metric.inset),
+            collectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -Metric.inset),
         ])
+    }
+    
+    func selectPhoto(imageIndex: Int) {
+        if model.indices.contains(imageIndex) {
+            print(#function, imageIndex)
+            let indexPath = self.collectionView.indexPathsForSelectedItems?.last ?? IndexPath(item: imageIndex, section: 0)
+            collectionView.selectItem(at: indexPath, animated: true, scrollPosition: UICollectionView.ScrollPosition.centeredVertically)
+        }
     }
     
 }
@@ -62,6 +62,24 @@ extension PhotosViewController: UICollectionViewDataSource {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PhotosCollectionViewCell.identifier, for: indexPath) as! PhotosCollectionViewCell
         cell.setImage(image: self.model[indexPath.row])
         return cell
+    }
+    
+}
+
+extension PhotosViewController: UICollectionViewDelegate {
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        ///print(#function, indexPath, collectionView.cellForItem(at: indexPath)?.isSelected)
+    }
+    
+}
+
+extension PhotosViewController {
+    
+    private enum Metric {
+        static let cellsInRow: CGFloat = 3
+        static let cellSpacing: CGFloat = 8
+        static let inset: CGFloat = 8
     }
     
 }

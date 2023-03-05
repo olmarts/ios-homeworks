@@ -1,12 +1,5 @@
-//
-//  PostViewController.swift
-//  Navigation
-//
-//  Created by user1 on 06.02.2023.
-//
 import UIKit
 
-// Показывает конкретный один пост в ленте Feed
 final class PostViewController: UIViewController {
     
     init(post: Post?) {

@@ -1,14 +1,6 @@
-//
-//  Post.swift
-//  Navigation
-//
-//  Created by user1 on 06.02.2023.
-//
-
 import Foundation
 
-/* Создайте модель публикации Post,
- она должна содержать следующие поля:
+/* модель публикации Post:
  - author: String - никнейм автора публикации
  - description: String - текст публикации
  - image: String - имя картинки из каталога Assets.xcassets

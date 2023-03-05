@@ -22,29 +22,30 @@ final class LogInViewController: UIViewController {
     
     private var logoImageView: UIImageView = {
         let imageView = UIImageView()
-        imageView.image = UIImage(named: "logo")
         imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.image = UIImage(named: "logo")
         return imageView
     }()
     
     private let roundCornersView: UIView = {
         let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
         view.layer.borderColor = UIColor.lightGray.cgColor
         view.layer.borderWidth = 0.5
         view.layer.cornerRadius = 10
-        view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
     
     private let separatorView: UIView = {
         let view = UIView()
-        view.backgroundColor = .lightGray
         view.translatesAutoresizingMaskIntoConstraints = false
+        view.backgroundColor = .lightGray
         return view
     }()
     
     private lazy var userNameTextField: UITextField = {
         let textField = UITextField()
+        textField.translatesAutoresizingMaskIntoConstraints = false
         textField.placeholder = "Email or phone"
         textField.placeholderColor(textField.textColor, alpha: 0.6)
         textField.layer.borderColor = UIColor.lightGray.cgColor
@@ -52,7 +53,6 @@ final class LogInViewController: UIViewController {
         textField.font = UIFont.systemFont(ofSize: 16, weight: .regular)
         textField.tintColor = UIColor(hex: "#4885CC")
         textField.autocapitalizationType = .none
-        textField.translatesAutoresizingMaskIntoConstraints = false
         textField.delegate = self
         textField.setPadding(left: 16, right: 16)
         return textField
@@ -60,6 +60,7 @@ final class LogInViewController: UIViewController {
     
     private lazy var userPasswordTextField: UITextField = {
         let textField = UITextField()
+        textField.translatesAutoresizingMaskIntoConstraints = false
         textField.isSecureTextEntry = true
         textField.placeholder = "Password"
         textField.placeholderColor(textField.textColor, alpha: 0.6)
@@ -68,14 +69,14 @@ final class LogInViewController: UIViewController {
         textField.font = UIFont.systemFont(ofSize: 16, weight: .regular)
         textField.tintColor = UIColor(hex: "#4885CC")
         textField.autocapitalizationType = .none
-        textField.translatesAutoresizingMaskIntoConstraints = false
         textField.delegate = self
         textField.setPadding(left: 16, right: 16)
         return textField
     }()
     
-    private var loginButton: UIButton = {
+    private lazy var loginButton: UIButton = {
         let button = UIButton()
+        button.translatesAutoresizingMaskIntoConstraints = false
         button.setTitle("Log in", for: .normal)
         button.setTitleColor(.white, for: .normal)
         button.setTitleColor(.white.withAlphaComponent(0.8), for: .selected)
@@ -87,7 +88,7 @@ final class LogInViewController: UIViewController {
         button.layer.maskedCorners = [.layerMaxXMaxYCorner, .layerMaxXMinYCorner, .layerMinXMaxYCorner, .layerMinXMinYCorner]
         button.layer.masksToBounds = true
         
-        button.translatesAutoresizingMaskIntoConstraints = false
+        button.addTarget(self, action: #selector(buttonPressed), for: .touchUpInside)
         return button
     }()
     
@@ -104,7 +105,6 @@ final class LogInViewController: UIViewController {
         [userNameTextField, separatorView, userPasswordTextField].forEach({ roundCornersView.addSubview($0) })
         contentView.addSubview(loginButton)
         setConstraints()
-        loginButton.addTarget(self, action: #selector(buttonPressed), for: .touchUpInside)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -156,20 +156,20 @@ final class LogInViewController: UIViewController {
             contentView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
             contentView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
             
-            logoImageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 160),
+            logoImageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: Metric.logoTop),
             logoImageView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             logoImageView.widthAnchor.constraint(equalToConstant: 100),
             logoImageView.heightAnchor.constraint(equalToConstant: 100),
             
             roundCornersView.topAnchor.constraint(equalTo: logoImageView.bottomAnchor, constant: 60),
-            roundCornersView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
-            roundCornersView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
-            roundCornersView.widthAnchor.constraint(equalTo: contentView.widthAnchor, constant: -32),
+            roundCornersView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: Metric.inset),
+            roundCornersView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -Metric.inset),
+            roundCornersView.widthAnchor.constraint(equalTo: contentView.widthAnchor, constant: -Metric.inset * 2),
             
             userNameTextField.topAnchor.constraint(equalTo: roundCornersView.topAnchor),
             userNameTextField.leadingAnchor.constraint(equalTo: roundCornersView.leadingAnchor),
             userNameTextField.trailingAnchor.constraint(equalTo: roundCornersView.trailingAnchor),
-            userNameTextField.heightAnchor.constraint(equalToConstant: 40),
+            userNameTextField.heightAnchor.constraint(equalToConstant: Metric.textFieldHeight),
             
             separatorView.topAnchor.constraint(equalTo: userNameTextField.bottomAnchor),
             separatorView.leadingAnchor.constraint(equalTo: roundCornersView.leadingAnchor),
@@ -179,14 +179,14 @@ final class LogInViewController: UIViewController {
             userPasswordTextField.topAnchor.constraint(equalTo: separatorView.bottomAnchor),
             userPasswordTextField.leadingAnchor.constraint(equalTo: roundCornersView.leadingAnchor),
             userPasswordTextField.trailingAnchor.constraint(equalTo: roundCornersView.trailingAnchor),
-            userPasswordTextField.heightAnchor.constraint(equalToConstant: 40),
+            userPasswordTextField.heightAnchor.constraint(equalToConstant: Metric.textFieldHeight),
             userPasswordTextField.bottomAnchor.constraint(equalTo: roundCornersView.bottomAnchor),
             
-            loginButton.topAnchor.constraint(equalTo: roundCornersView.bottomAnchor, constant: 8),
-            loginButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
-            loginButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
-            loginButton.heightAnchor.constraint(equalToConstant: 50),
-            loginButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -8)
+            loginButton.topAnchor.constraint(equalTo: roundCornersView.bottomAnchor, constant: Metric.inset/2),
+            loginButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: Metric.inset),
+            loginButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -Metric.inset),
+            loginButton.heightAnchor.constraint(equalToConstant: Metric.buttonHeight),
+            loginButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -Metric.inset/2)
             
         ])
     }
@@ -202,3 +202,13 @@ extension LogInViewController: UITextFieldDelegate {
     
 }
 
+extension LogInViewController {
+    
+    private enum Metric {
+        static let logoTop: CGFloat = 160
+        static let textFieldHeight: CGFloat = 40
+        static let buttonHeight: CGFloat = 50
+        static let inset: CGFloat = 16
+    }
+    
+}
