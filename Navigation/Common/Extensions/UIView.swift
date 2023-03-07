@@ -6,38 +6,34 @@ extension UIView {
         String(describing: self)
     }
     
-    func addToWindow()  {
-        if let window = UIWindow.keyWindow() {
-            self.frame = window.bounds
-            window.addSubview(self)
-        } else {
-            fatalError("This UIApplication has'nt any UIWindow instances.")
-        }
+    func centerInContainingWindow() -> CGPoint {
+        if let window = self.window, let superview = self.superview {
+            let windowCenter = CGPoint(x: window.frame.midX, y: window.frame.midY)
+            return superview.convert(windowCenter, from: nil)
+        } else { return self.center }
     }
     
     func cloneObject<T:UIView>() -> T? {
         do {
-            // create an NSData object from self:
             let data = try NSKeyedArchiver.archivedData(withRootObject:self, requiringSecureCoding:false)
-            // a clone by unarchiving the NSData:
             return try NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(data) as? T
         }
-        catch { return nil }
+        catch { fatalError("Error on \(#function).") }
     }
     
-}
-
-
-extension UIWindow {
-    
-    // MARK: - UIWindow.keyWindow()?.endEditing(true)
-    static func keyWindow() -> UIWindow? {
-        let keyWindow = UIApplication.shared.connectedScenes
-                .filter({$0.activationState == .foregroundActive})
-                .compactMap({$0 as? UIWindowScene})
-                .first?.windows
-                .filter({$0.isKeyWindow}).first
-        return keyWindow
+    func animateShakeEffect(_ duration: Double = 0.5) {
+        let animation = CAKeyframeAnimation(keyPath: "transform.translation.x")
+        animation.timingFunction = CAMediaTimingFunction(name: CAMediaTimingFunctionName.linear)
+        animation.duration = CFTimeInterval(floatLiteral: duration)
+        animation.values = [-10.0, 10.0, -10.0, 10.0, -10.0, 10.0, -5.0, 5.0, 0.0 ]
+        layer.add(animation, forKey: "shake")
     }
     
+    func animatePressEffect(duration: Double = 0.3) {
+        UIView.animate(withDuration: duration, animations: {
+            self.transform = CGAffineTransform(scaleX: 0.75, y: 0.75)
+        }, completion: { _ in
+            self.transform = .identity
+        })
+    }
 }

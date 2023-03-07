@@ -6,36 +6,49 @@ import Foundation
  - image: String - имя картинки из каталога Assets.xcassets
  - likes: Int - количество лайков
  - views: Int - количество просмотров
+ 
+ Переделано в класс.
  */
-struct Post {
-    var author: String
-    var description: String
-    var image: String
-    var likes: Int
-    var views: Int
+class Post: Codable {
+    
+    var author: String = ""
+    var description: String = ""
+    var image: String = ""
+    var likes: Int = 0
+    var views: Int = 0
+    
+    init(author: String, description: String, image: String, likes: Int, views: Int) {
+        self.author = author
+        self.description = description
+        self.image = image
+        self.likes = likes
+        self.views = views
+    }
+}
+
+extension Post {
     
     static func makeMockModel() -> [Post] {
-        var model = [Post]()
-        
-        model.append(Post(author: "Сергей Лепилов",
+        var post = [Post]()
+        post.append(Post(author: "Сергей Лепилов",
                           description: "Очень компактный мобильный компьютер на процессоре Intel семейства Tiger Lake с возможностью установки до 64 Гбайт оперативной памяти, двумя портами M.2 и исчерпывающим набором интерфейсов – реальность или, как иногда говорят, «есть нюанс»? Нюанс, а точнее, нюансы на самом деле есть, но их совсем немного и... Впрочем, обо всём по порядку.",
                           image: "01.jpg", likes: 234, views: 3234))
-        model.append(Post(author: "Александр Бабулин",
+        post.append(Post(author: "Александр Бабулин",
                           description: "После тихого (в плане выпуска смартфонов) 2022 года у HONOR очень большие планы на 2023-й. Компания явно настроена если не на возвращение лидирующих позиций прямо сейчас, то хотя бы на активную борьбу. Google-сервисы на месте, в Китае новые модели выпускаются стабильно — пора их перетаскивать и на наш рынок. Особенно такие перспективные, как HONOR X9a.",
                           image: "02.jpg", likes: 7437, views: 59637))
-        model.append(Post(author: "Сергей Сурабекянц",
+        post.append(Post(author: "Сергей Сурабекянц",
                           description: "В новой патентной заявке Apple описывается способ преобразования сообщений в iMessage в голосовые заметки, причём получатель может выбрать, как должно быть прочитано сообщение — голосом Siri или голосом отправителя. Для этого каждому пользователю нужно будет поделиться с другими голосовым файлом, данные из которого затем использует iPhone для имитации голоса автора сообщения при его озвучивании.",
                           image: "03.jpg", likes: 4637, views: 48935))
-        model.append(Post(author: "Геннадий Детинич",
+        post.append(Post(author: "Геннадий Детинич",
                           description: "Молодая американская компания Sakuu сообщила об успешной 3D-печати полностью рабочих литиевых аккумуляторов произвольной формы. Работы успешно и последовательно выполняются с декабря 2022 года. Технология доступна как для лицензирования для изготовления батарей традиционным рулонным методом, так и для организации мегафабрик по производству аккумуляторов на 3D-принтерах компании. Ограничений для производства нет.",
                           image: "04.jpg", likes: 3738, views: 96751))
-        model.append(Post(author: "Сергей Сурабекянц",
+        post.append(Post(author: "Сергей Сурабекянц",
                           description: "Китайская компания NetEase объявила, что в новой версии массовой многопользовательской онлайн-игры (MMO) Justice Online Mobile речь неигровых персонажей (NPC) будет генерироваться искусственным интеллектом ChatGPT на основе большой языковой модели. Новая версия игры с интегрированным ChatGPT находится на стадии демоверсии и пока невозможно точно определить степень интеграции.",
                           image: "05.jpg", likes: 7902, views: 93526))
-        model.append(Post(author: "Елена Клюсовец",
+        post.append(Post(author: "Елена Клюсовец",
                           description: "По мнению кошек, люди — глупые существа»: зоопсихолог ответила на главные вопросы о домашних пушистиках.",
                           image: "png-cat.jpg", likes: 57322, views: 346294))
-        return model
+        return post
     }
     
-}
+ }

@@ -2,24 +2,25 @@ import UIKit
 
 final class PhotosTableViewCell: UITableViewCell {
     
-    // функция назначается контроллером, в котором определен UITableView:
-    var showPhotoGallery: ((Int) -> Void)? = nil
+    private var model: [UIImage] = Photos.makeMockModel(maxCount: 24)
+    var photoGalleryCallback:  ((UIImage?) -> Void)? = nil
     
-    private let model: [UIImage] = Photos.makeMockModel(maxCount: 4)
-    
-    private let titleLabel: UILabel = {
+    private lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
+        label.isUserInteractionEnabled = true
         label.text = "Photos"
         label.font = UIFont.systemFont(ofSize: 24, weight: .bold)
         label.textColor = .black
+        label.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(reloadData)))
         return label
     }()
     
-    private let galleryButton: UIButton = {
+    private lazy var galleryButton: UIButton = {
         let button = UIButton(type: .system)
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setImage(UIImage(systemName: "arrow.forward"), for: .normal)
+        button.addTarget(self, action: #selector(showGallaryAction), for: .touchUpInside)
         return button
     }()
     
@@ -36,7 +37,6 @@ final class PhotosTableViewCell: UITableViewCell {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.dataSource = self
-        collectionView.delegate = self
         collectionView.register(PhotosCollectionViewCell.self,  forCellWithReuseIdentifier: PhotosCollectionViewCell.identifier)
         return collectionView
     }()
@@ -53,8 +53,6 @@ final class PhotosTableViewCell: UITableViewCell {
     private func setup() {
         // установить isUserInteractionEnabled именно ДО addSubview(..) чтобы включились все addTarget из ячейки таблицы:
         contentView.isUserInteractionEnabled = true
-        
-        galleryButton.addTarget(self, action: #selector(buttonPressed), for: .touchUpInside)
         [titleLabel, galleryButton, collectionView].forEach({ addSubview($0) })
         
         NSLayoutConstraint.activate([
@@ -73,8 +71,22 @@ final class PhotosTableViewCell: UITableViewCell {
         ])
     }
     
-    @objc private func buttonPressed() {
-        if let action = self.showPhotoGallery { action(-1) }
+    /// Рандомные картинки в коллекции.
+    @objc private func reloadData() {
+        var photos: [UIImage] = []
+        while photos.count < model.count {
+            if let randomItem = model.randomElement() {
+                if photos.contains(where: { $0 == randomItem }) == false {
+                    photos.append(randomItem)
+                }
+            }
+        }
+        model = photos
+        collectionView.reloadData()
+    }
+    
+    @objc private func showGallaryAction() {
+        photoGalleryCallback?(nil)
     }
     
 }
@@ -92,7 +104,7 @@ extension PhotosTableViewCell {
 extension PhotosTableViewCell: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return self.model.count
+        return min(4, self.model.count)
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -103,11 +115,4 @@ extension PhotosTableViewCell: UICollectionViewDataSource {
     
 }
 
-extension PhotosTableViewCell: UICollectionViewDelegate {
-    
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        // покажем галерею с выделенной фоткой:
-        if let action = self.showPhotoGallery { action(indexPath.row) }
-    }
-    
-}
+ 

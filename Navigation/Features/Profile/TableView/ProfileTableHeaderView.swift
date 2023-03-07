@@ -2,10 +2,9 @@ import UIKit
 
 final class ProfileTableHeaderView: UIView {
     
-    private var statusText = String()
     private let defaultStatusText = "Listening to music"
     
-    let userImageView: UIImageView = {
+    private lazy var userImageView: UIImageView = {
         let imageView = UIImageView(frame: CGRect(x: 0, y: 0, width: Metric.avatarWidth, height: Metric.avararHeight))
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.image = UIImage(named: "png-cat")
@@ -14,6 +13,7 @@ final class ProfileTableHeaderView: UIView {
         imageView.layer.borderWidth = 3
         imageView.layer.borderColor = UIColor.white.cgColor
         imageView.isUserInteractionEnabled = true
+        imageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(tapImageAction)))
         return imageView
     }()
     
@@ -42,35 +42,33 @@ final class ProfileTableHeaderView: UIView {
     }()
     
     private lazy var statusTextField: UITextField = {
-        let textField = UITextField()
-        textField.setPadding(left: 16, right: 16)
+        let textField = PaddingTextField()
+        textField.translatesAutoresizingMaskIntoConstraints = false
+        textField.clearButtonMode = .whileEditing
         textField.placeholder = defaultStatusText
         textField.font = UIFont.systemFont(ofSize: 15, weight: .regular)
+        textField.backgroundColor = .white
         textField.textColor = .black
         textField.layer.cornerRadius = 12
         textField.layer.borderWidth = 1.0
         textField.layer.borderColor = UIColor.black.cgColor
-        textField.backgroundColor = .white
-        textField.translatesAutoresizingMaskIntoConstraints = false
         textField.delegate = self
-        textField.addTarget(self, action: #selector(statusTextChanged), for: .editingChanged)
         return textField
     }()
     
     private lazy var setStatusButton: UIButton = {
         let button = UIButton(type: .system)
         button.translatesAutoresizingMaskIntoConstraints = false
+        button.backgroundColor = .systemBlue
         button.setTitle("Set status", for: .normal)
         button.setTitleColor(.white, for: .normal)
-        button.backgroundColor = .systemBlue
         button.layer.cornerRadius = 4
         button.layer.shadowOffset = CGSize(width: 4, height: 4)
         button.layer.shadowColor = UIColor.black.cgColor
         button.layer.shadowOpacity = 0.7
-        button.addTarget(self, action: #selector(buttonPressed), for: .touchUpInside)
+        button.addTarget(self, action: #selector(setStatusAction), for: .touchUpInside)
         return button
     }()
-    
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -85,23 +83,6 @@ final class ProfileTableHeaderView: UIView {
         backgroundColor = .systemGray3
         [userImageView, userNameLabel, userStatusLabel, statusTextField, setStatusButton].forEach({ addSubview($0) })
         setConstraints()
-        userImageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(tapImageAction)))
-    }
-    
-    @objc private func tapImageAction() {
-        let glassView = ProfileAnimationView(originalView: userImageView)
-        addSubview(glassView)
-        glassView.animateView()
-    }
-    
-    @objc private func buttonPressed() -> Bool {
-        userStatusLabel.text = statusText.isEmpty ? defaultStatusText : statusText
-        statusTextField.text = nil
-        return textFieldShouldReturn(statusTextField)
-    }
-    
-    @objc private func statusTextChanged(_ textField: UITextField) {
-        statusText = textField.text!
     }
     
     private func setConstraints() {
@@ -133,15 +114,22 @@ final class ProfileTableHeaderView: UIView {
         ])
     }
     
-}
-
-extension ProfileTableHeaderView: UITextFieldDelegate {
-    
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        endEditing(true)
-        return true
+    @objc private func setStatusAction() {
+        guard let statusText = statusTextField.text?.trimmingCharacters(in: .whitespaces) else { return }
+        if statusText.count == 0 {
+            statusTextField.animateShakeEffect()
+            return
+        }
+        userStatusLabel.text = statusText
+        statusTextField.text = nil
+        self.endEditing(true)
     }
     
+    @objc private func tapImageAction() {
+        let glassView = ProfileAnimationView(originalView: userImageView)
+        addSubview(glassView)
+        glassView.animateView()
+    }
 }
 
 extension ProfileTableHeaderView {
@@ -153,3 +141,13 @@ extension ProfileTableHeaderView {
     }
     
 }
+
+extension ProfileTableHeaderView: UITextFieldDelegate {
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        endEditing(true)
+        return true
+    }
+    
+}
+
